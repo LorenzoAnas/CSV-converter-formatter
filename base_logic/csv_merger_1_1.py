@@ -23,7 +23,7 @@ class MyWindow(QMainWindow):
         # Create a label for the drop area
         self.drop_label = QLabel("Drop CSV files here")
         self.drop_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.drop_label.setStyleSheet("background-color: lightgray")
+        self.drop_label.setStyleSheet("background-color: lightgreen")
         self.drop_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.drop_label, 0, 0, 1, 2)
     
