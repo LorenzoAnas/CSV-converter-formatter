@@ -1,9 +1,8 @@
 import os
 import sys
 import csv
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWidget, QFileDialog, QPushButton, QMessageBox, QTableWidget, QTableWidgetItem, QVBoxLayout, QHBoxLayout, QSizePolicy
-from PyQt6 import QtCore, QtGui
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWidget, QFileDialog, QPushButton, QTableWidget, QTableWidgetItem, QSizePolicy
+from PyQt6 import QtCore
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -37,7 +36,7 @@ class MyWindow(QMainWindow):
         # Create a button for merging the files
         self.merge_button = QPushButton("Merge Files")
         self.merge_button.setDisabled(True)
-        layout.addWidget(self.merge_button, 1, 0, 1, 2)
+        layout.addWidget(self.merge_button, 3, 0, 1, 2)
 
         # Create browse button
         self.browse_button = QPushButton('Browse', self)
@@ -52,9 +51,17 @@ class MyWindow(QMainWindow):
         self.merge_button.clicked.connect(self.merge_files)
 
     def browse(self):
-        # open file dialog when button is clicked
-        file_dialog = QFileDialog(self)
-        file_dialog.show()
+        # Start the file dialog from the desktop folder
+        starting_folder = os.path.expanduser("~/Desktop")
+        file_dialog = QFileDialog(self, "Select a file", starting_folder, "CSV files (*.csv)")
+        file_dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
+        if file_dialog.exec() == QFileDialog.DialogCode.Accepted:
+            file_path = file_dialog.selectedFiles()[0]
+            self.file_paths.append(file_path)
+            self.add_csv_file_to_table(file_path=file_path)
+            self.merge_button.setDisabled(False)
+        else:
+            return None
 
     def drag_enter_event(self, event):
         if event.mimeData().hasUrls():
